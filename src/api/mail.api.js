@@ -1,7 +1,7 @@
 import axios from "axios";
 require("dotenv").config();
 
-const url = process.env.API_URL;
+const url = process.env.REACT_APP_API_URL;
 
 export async function getMails(token) {
   return await axios.get(url + "/api/mail", {
