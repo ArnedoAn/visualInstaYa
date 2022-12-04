@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = process.env.REACT_APP_API_URL;
+const url = "https://instaya.onrender.com";
 
 export async function getMails(token) {
   return await axios.get(url + "/api/mail", {
