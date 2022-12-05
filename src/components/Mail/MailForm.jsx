@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getMail, addMail } from "../api/mail.api";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useMails } from "../../context/MailProvider";
 
-function MailForm() {
-  const location = useLocation();
+function MailForm({ type }) {
   const navigate = useNavigate();
-  const type = location.state.type;
+
+  const { mail, addMail, updateMail } = useMails();
+
   function convertFormat(values) {
     const {
       toDate,
@@ -59,7 +60,7 @@ function MailForm() {
     }
   };
 
-  const [mail, setMail] = useState({
+  const [mailForm, setMailForm] = useState({
     toDate: new Date(),
     package: {
       dimensions: { high: 0, width: 0, length: 0 },
@@ -87,44 +88,32 @@ function MailForm() {
     });
 
   useEffect(() => {
-    if (type === "edit") {
-      setMail(getMail(location.state.token, { id: location.state.id }));
-    }
-  }, []);
-
-  const sendNewMail = async (data) => {};
-
-  const sendEditMail = async (data) => {};
-
-  useEffect(() => {
-    if (type === "edit") {
-      setMail(getMail(location.state.token, { id: location.state.id }));
+    if (type == "edit") {
+      setMailForm(mail);
     }
   }, []);
 
   return (
     <div>
       <Formik
-        initialValues={mail}
+        initialValues={mailForm}
         onSubmit={async (values) => {
           try {
             const data = convertFormat(values);
-            console.log(data);
-            console.log(type);
             if (type === "new") {
-              const response = await addMail(location.state.token, data);
+              const response = await addMail(data);
               console.log(response);
               showSuccess();
               setTimeout(() => {
-                navigate("/mail", { state: { token: location.state.token } });
+                navigate("/mail");
               }, 2000);
             } else {
               console.log(2);
-              const response = await updateMail(location.state.token, data);
+              const response = await updateMail(data);
               console.log(response);
               showSuccess();
               setTimeout(() => {
-                navigate("/mail", { state: { token: location.state.token } });
+                navigate("/mail");
               }, 2000);
             }
           } catch (error) {

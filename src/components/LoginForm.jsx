@@ -4,9 +4,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { Form, Formik } from "formik";
 import { loginUser } from "../api/login.api";
 import { useNavigate } from "react-router-dom";
+import { useMails } from "../context/MailProvider";
 
 function LoginForm() {
   const navigate = useNavigate();
+
+  const { setToken, setName } = useMails();
 
   const showSuccess = () =>
     toast.success("Login exitoso!", {
@@ -25,10 +28,11 @@ function LoginForm() {
         onSubmit={async (values, actions) => {
           try {
             const response = await loginUser(values);
-            console.log(response.data.token);
             showSuccess();
+            setToken(response.data.token);
+            setName(response.data.actualUser.name);
             setTimeout(() => {
-              navigate("/mail", { state: { token: response.data.token } });
+              navigate("/mail");
             }, 2000);
           } catch (error) {
             showError();
@@ -104,7 +108,7 @@ function LoginForm() {
                         onClick={() => navigate("/register")}
                         className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                       >
-                       &ensp;Registrate!
+                        &ensp;Registrate!
                       </a>
                     </p>
                     <ToastContainer />

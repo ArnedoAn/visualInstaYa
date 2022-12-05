@@ -11,8 +11,8 @@ function RegisterForm() {
       position: toast.POSITION.TOP_CENTER,
     });
 
-  const showUserExist = () =>
-    toast.error("Usuario ya existe!", { position: toast.POSITION.TOP_CENTER });
+  const showError = (text) =>
+    toast.error(text, { position: toast.POSITION.TOP_CENTER });
 
   return (
     <div>
@@ -29,10 +29,11 @@ function RegisterForm() {
             console.log(response);
             showSuccess();
             setTimeout(() => {
-              navigate("/login", { state: { token: response.token } });
+              navigate("/");
             }, 2000);
           } catch (error) {
-            showUserExist();
+            const { message } = error.response.data;
+            showError(message);
             console.log(error);
             actions.resetForm();
           }
@@ -138,7 +139,7 @@ function RegisterForm() {
                       ¿Ya tiene una cuenta?{" "}
                       <a
                         onClick={() => navigate("/")}
-                        class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                        className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                       >
                         Ingrese aqui!
                       </a>
