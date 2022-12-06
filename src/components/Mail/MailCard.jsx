@@ -29,11 +29,11 @@ function MailCard() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                      
                         {mails.map((mail) => (
                           <MailObject key={mail.id} mail={mail} />
                         ))}
-                      </tr>
+                      
                     </tbody>
                   </table>
                 </div>

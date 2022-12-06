@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useMails } from "../../context/MailProvider";
+import { addMail, updateMail } from "../../api/mail.api";
 
 function MailForm({ type }) {
   const navigate = useNavigate();
 
-  const { mail, addMail, updateMail } = useMails();
+  const { mail, token, setMail } = useMails();
 
   function convertFormat(values) {
     const {
@@ -60,25 +61,8 @@ function MailForm({ type }) {
     }
   };
 
-  const [mailForm, setMailForm] = useState({
-    toDate: new Date(),
-    package: {
-      dimensions: { high: 0, width: 0, length: 0 },
-      weigth: 0,
-      fragile: false,
-    },
-    toUser: {
-      nameToUser: "",
-      dniToUser: "",
-      addressToUser: "",
-      cityToUser: "",
-    },
-    fromUser: { nameFromUser: "", addressFromUser: "", cityFromUser: "" },
-    status: "Guardado",
-  });
-
-  const showSuccess = () =>
-    toast.success("Paquete enviado!", {
+  const showSuccess = (text) =>
+    toast.success(text, {
       position: toast.POSITION.TOP_CENTER,
     });
 
@@ -87,39 +71,43 @@ function MailForm({ type }) {
       position: toast.POSITION.TOP_CENTER,
     });
 
-  useEffect(() => {
-    if (type == "edit") {
-      setMailForm(mail);
+  const newSubmit = async (data) => {
+    try {
+      const response = await addMail(token, data);
+      showSuccess("Paquete enviado!");
+      setTimeout(() => {
+        navigate("/mail");
+      }, 2000);
+    } catch (error) {
+      showError(error.response.data.message);
+      console.error(error);
     }
-  }, []);
+  };
+
+  const editSubmit = async (data) => {
+    try {
+      const response = await updateMail(token, data);
+      showSuccess("Paquete actualizado!");
+      setTimeout(() => {
+        navigate("/mail");
+      }, 2000);
+    } catch (error) {
+      const { message } = error.response.data;
+      showError(message);
+      console.error(message);
+    }
+  };
 
   return (
     <div>
       <Formik
-        initialValues={mailForm}
+        initialValues={mail}
         onSubmit={async (values) => {
-          try {
-            const data = convertFormat(values);
-            if (type === "new") {
-              const response = await addMail(data);
-              console.log(response);
-              showSuccess();
-              setTimeout(() => {
-                navigate("/mail");
-              }, 2000);
-            } else {
-              console.log(2);
-              const response = await updateMail(data);
-              console.log(response);
-              showSuccess();
-              setTimeout(() => {
-                navigate("/mail");
-              }, 2000);
-            }
-          } catch (error) {
-            const { message } = error.response.data;
-            showError(message);
-            console.error();
+          const data = convertFormat(values);
+          if (type === "new") {
+            await newSubmit(data);
+          } else {
+            await editSubmit(data);
           }
         }}
       >
@@ -304,28 +292,17 @@ function MailForm({ type }) {
                       />
                     </div>
 
-                    <div>
-                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Estado
-                      </label>
-                      <input
-                        type="text"
-                        name="status"
-                        value={values.status}
-                        readOnly
-                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      />
-                    </div>
-
+                    <ToastContainer />
+                  </Form>
+                  <div>
                     <button
                       type="submit"
                       onClick={handleSubmit}
-                      className="px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out justify-center"
+                      className="px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out w-full"
                     >
                       Enviar
                     </button>
-                    <ToastContainer />
-                  </Form>
+                  </div>
                 </div>
               </div>
             </div>
