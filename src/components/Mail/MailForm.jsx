@@ -34,7 +34,7 @@ function MailForm({ type }) {
       toDate: new Date(toDate),
       package: {
         dimensions: {
-          high,
+          high: high !==undefined? high: mail.package.dimensions.high,
           width,
           length,
         },

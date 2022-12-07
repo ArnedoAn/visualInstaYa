@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://pear-hummingbird-hat.cyclic.app";
+const url = import.meta.env.VITE_HOST;
 
 export async function getMails(token, data) {
   return await axios.get(url + "/api/mail", {
