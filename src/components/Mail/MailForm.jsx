@@ -12,10 +12,11 @@ function MailForm({ type }) {
   const { mail, token, setMail } = useMails();
 
   function convertFormat(values) {
+    console.log(values);
     const {
       toDate,
-      high,
       width,
+      high,
       length,
       weigth,
       fragile,
@@ -32,7 +33,11 @@ function MailForm({ type }) {
     const data = {
       toDate: new Date(toDate),
       package: {
-        dimensions: { high, width, length },
+        dimensions: {
+          high,
+          width,
+          length,
+        },
         weigth,
         fragile: fragile === "Si" ? true : false,
       },
@@ -103,7 +108,9 @@ function MailForm({ type }) {
       <Formik
         initialValues={mail}
         onSubmit={async (values) => {
+          console.log(values);
           const data = convertFormat(values);
+          console.log(data);
           if (type === "new") {
             await newSubmit(data);
           } else {
@@ -125,6 +132,7 @@ function MailForm({ type }) {
                         type="date"
                         name="toDate"
                         onChange={handleChange}
+                        onSubmit={handleChange}
                         defaultValue={dateFormat(values.toDate)}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -138,6 +146,7 @@ function MailForm({ type }) {
                         type="number"
                         name="high"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.package.dimensions.high}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -151,6 +160,7 @@ function MailForm({ type }) {
                         type="number"
                         name="width"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.package.dimensions.width}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -164,6 +174,7 @@ function MailForm({ type }) {
                         type="number"
                         name="length"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.package.dimensions.length}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -177,6 +188,7 @@ function MailForm({ type }) {
                         type="number"
                         name="weigth"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.package.weigth}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -193,6 +205,7 @@ function MailForm({ type }) {
                         name="fragile"
                         id="isFragile"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.package.fragile ? "Si" : "No"}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
@@ -209,6 +222,7 @@ function MailForm({ type }) {
                         type="text"
                         name="nameToUser"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.toUser.name}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -222,6 +236,7 @@ function MailForm({ type }) {
                         type="text"
                         name="dniToUser"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.toUser.dni}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -235,6 +250,7 @@ function MailForm({ type }) {
                         type="text"
                         name="addressToUser"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.toUser.address}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -248,6 +264,7 @@ function MailForm({ type }) {
                         type="text"
                         name="cityToUser"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.toUser.city}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -261,6 +278,7 @@ function MailForm({ type }) {
                         type="text"
                         name="nameFromUser"
                         onChange={handleChange}
+                        onSubmit={handleSubmit}
                         defaultValue={values.fromUser.name}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
@@ -273,6 +291,7 @@ function MailForm({ type }) {
                       <input
                         type="text"
                         name="addressFromUser"
+                        onSubmit={handleSubmit}
                         onChange={handleChange}
                         defaultValue={values.fromUser.address}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -286,6 +305,7 @@ function MailForm({ type }) {
                       <input
                         type="text"
                         name="cityFromUser"
+                        onSubmit={handleSubmit}
                         onChange={handleChange}
                         defaultValue={values.fromUser.city}
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

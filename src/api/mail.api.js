@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://localhost:3000";
+const url = "https://pear-hummingbird-hat.cyclic.app";
 
 export async function getMails(token, data) {
   return await axios.get(url + "/api/mail", {
